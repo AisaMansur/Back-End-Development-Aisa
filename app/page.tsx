@@ -1,64 +1,62 @@
-'use client';
+''use client';
 
 import { useState, useEffect } from 'react';
 import UserCard from '@/components/UserCard';
 
+// Tipe data untuk User
+interface User {
+  id: number | string;
+  name: string;
+  email: string;
+  [key: string]: any;
+}
+
 export default function HomePage() {
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState<User[]>([]);
+  const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    fetch('/api/users')
-      .then((res) => res.json())
-      .then((data) => {
-        setUsers(Array.isArray(data) ? data : []);
+    async function fetchUsers() {
+      try {
+        const res = await fetch('/api/users');
+        const data = await res.res ? await res.json() : await res.json();
+        setUsers(Array.isArray(data) ? data : data.users || []);
+      } catch (error) {
+        console.error('Failed to fetch users:', error);
+      } finally {
         setLoading(false);
-      })
-      .catch((err) => {
-        console.error('Error fetching users:', err);
-        setLoading(false);
-      });
+      }
+    }
+    fetchUsers();
   }, []);
 
   const filteredUsers = users.filter((user) =>
-    user.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    user.email?.toLowerCase().includes(searchTerm.toLowerCase())
+    user.name?.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
     <div className="space-y-6">
-      {/* Hero / Banner Section */}
-      <section className="bg-gradient-to-r from-emerald-600 to-teal-700 text-white p-8 rounded-2xl shadow-lg text-center my-4">
-        <h1 className="text-3xl font-extrabold mb-2">Selamat Datang di User Directory</h1>
-        <p className="text-emerald-100 max-w-xl mx-auto text-sm">
-          Temukan dan kelola informasi pengguna dengan cepat, efisien, dan responsif. Tambahkan pengguna favorit Anda ke dalam daftar khusus!
-        </p>
-      </section>
-
-      {/* Search Input Section */}
-      <div className="flex justify-between items-center bg-white p-4 rounded-xl shadow-sm border border-gray-100">
-        <h2 className="text-xl font-bold text-gray-800">Daftar Pengguna</h2>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">User Directory</h1>
+          <p className="text-gray-500 text-sm">Manage and view user profiles</p>
+        </div>
         <input
           type="text"
-          placeholder="Cari berdasarkan nama atau email..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full max-w-xs px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          placeholder="Search user by name..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="p-2 border rounded-md w-full md:w-64 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
 
-      {/* Content Section */}
       {loading ? (
-        <div className="text-center py-12">
-          <p className="text-gray-500 font-medium">Memuat data user...</p>
-        </div>
+        <p className="text-gray-500 text-center py-10">Loading users...</p>
       ) : filteredUsers.length === 0 ? (
-        <div className="text-center py-12 bg-white rounded-xl shadow-sm border border-gray-100">
-          <p className="text-gray-500 font-medium">Tidak ada pengguna yang ditemukan.</p>
-        </div>
+        <p className="text-gray-500 text-center py-10">No users found.</p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredUsers.map((user) => (
             <UserCard key={user.id} user={user} />
           ))}

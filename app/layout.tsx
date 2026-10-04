@@ -7,7 +7,11 @@ export const metadata = {
   description: 'Assignment Front-End Next.js',
 };
 
-export default function RootLayout({ children }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="id">
       <body className="bg-gray-50 text-gray-800 min-h-screen">
