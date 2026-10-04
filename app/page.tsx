@@ -20,7 +20,7 @@ export default function HomePage() {
     async function fetchUsers() {
       try {
         const res = await fetch('/api/users');
-        const data = await res.res ? await res.json() : await res.json();
+        const data = await res.json();
         setUsers(Array.isArray(data) ? data : data.users || []);
       } catch (error) {
         console.error('Failed to fetch users:', error);
