@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test": "jest"
   },
   "dependencies": {
     "next": "16.3.8",
@@ -14,12 +15,16 @@
     "react-dom": "19.2.8"
   },
   "devDependencies": {
+    "@babel/core": "^8.0.6",
+    "@babel/preset-env": "^8.0.6",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "babel-jest": "^30.5.2",
     "eslint": "^9",
     "eslint-config-next": "16.3.8",
+    "jest": "^30.5.2",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
