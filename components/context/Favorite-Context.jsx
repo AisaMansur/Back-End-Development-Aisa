@@ -1,3 +1,5 @@
+// Update
+// BE 2 CRUD not using useState again, but using Context API to manage state globally
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
@@ -27,7 +29,9 @@ export function FavoriteProvider({ children }) {
   }
 
   async function removeFavorite(userId) {
-    const res = await fetch(`/api/favorites/${userId}`, { method: "DELETE" });
+    const res = await fetch(`/api/favorites/${userId}`, {
+      method: "DELETE",
+    });
 
     if (res.ok) {
       setFavorites((prev) => prev.filter((f) => f.id !== userId));
@@ -38,7 +42,22 @@ export function FavoriteProvider({ children }) {
     return favorites.some((f) => f.id === userId);
   }
 
-  const value = { favorites, addFavorite, removeFavorite, isFavorite };
+  // Tambahkan ini
+  async function toggleFavorite(user) {
+    if (isFavorite(user.id)) {
+      await removeFavorite(user.id);
+    } else {
+      await addFavorite(user);
+    }
+  }
+
+  const value = {
+    favorites,
+    addFavorite,
+    removeFavorite,
+    isFavorite,
+    toggleFavorite,
+  };
 
   return (
     <FavoriteContext.Provider value={value}>
@@ -49,8 +68,12 @@ export function FavoriteProvider({ children }) {
 
 export function useFavorite() {
   const context = useContext(FavoriteContext);
+
   if (context === undefined) {
-    throw new Error("useFavorite harus dipakai di dalam <FavoriteProvider>");
+    throw new Error(
+      "useFavorite harus dipakai di dalam <FavoriteProvider>"
+    );
   }
+
   return context;
 }

@@ -1,67 +1,43 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import UserCard from '@/components/UserCard';
-import { Input } from '@/components/ui/input';
+import { useFavorite } from "@/components/context/Favorite-Context";
+import { SearchX } from "lucide-react";
+import UserCard from "@/components/UserCard";
 
-export default function HomePage() {
-  const [users, setUsers] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [loading, setLoading] = useState(true);
-
-  // Ambil data user dari API
-  useEffect(() => {
-    fetch('https://jsonplaceholder.typicode.com/users')
-      .then((res) => res.json())
-      .then((data) => {
-        setUsers(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error('Error fetching users:', err);
-        setLoading(false);
-      });
-  }, []);
-
-  // Filter user berdasarkan input pencarian
-  const filteredUsers = users.filter((user) =>
-    user.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+export default function FavoritePage() {
+  const { favorites } = useFavorite();
 
   return (
-    <div className="max-w-5xl mx-auto px-6 py-8">
-      {/* Header & Search Bar shadcn/ui */}
-      <div className="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <h2 className="text-2xl font-bold text-gray-800">Daftar Pengguna</h2>
-        
-        <div className="w-full md:w-72">
-          <Input
-            type="text"
-            placeholder="Cari nama user..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+    <section className="relative">
+      <div className="bg-grid bg-radial-fade absolute inset-0 -z-10" />
+
+      <div className="mx-auto max-w-6xl px-6 py-20">
+        <div className="max-w-2xl">
+          <p className="text-sm font-semibold text-primary">Favorite</p>
+          <h1 className="mt-2 text-4xl font-bold tracking-tight md:text-5xl">
+            My Favorite Users
+          </h1>
+          <p className="mt-4 text-muted-foreground">
+            Data ini diambil langsung dari FavoriteContext.
+          </p>
+        </div>
+
+        <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {favorites.length > 0 ? (
+            favorites.map((user) => (
+              <UserCard
+                key={user.id}
+                user={user}
+              />
+            ))
+          ) : (
+            <div className="col-span-full flex flex-col items-center gap-3 py-16 text-center text-muted-foreground">
+              <SearchX className="size-8" />
+              <p>Belum ada user yang dijadikan favorit.</p>
+            </div>
+          )}
         </div>
       </div>
-
-      {/* Loading & Daftar User */}
-      {loading ? (
-        <p className="text-center text-gray-500 py-10">Memuat data user...</p>
-      ) : (
-        <>
-          {filteredUsers.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredUsers.map((user) => (
-                <UserCard key={user.id} user={user} />
-              ))}
-            </div>
-          ) : (
-            <p className="text-center text-gray-500 py-10">
-              User dengan nama "{searchTerm}" tidak ditemukan.
-            </p>
-          )}
-        </>
-      )}
-    </div>
+    </section>
   );
 }
