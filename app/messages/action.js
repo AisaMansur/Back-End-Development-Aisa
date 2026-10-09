@@ -2,7 +2,7 @@
 // Update for Supabase Integration
 'use server';
 
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { createSupabaseServerClient } from "@/lib/supabase/supabase";
 import { revalidatePath } from "next/cache";
 
 export async function deleteMessageAction(formData) {

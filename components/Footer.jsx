@@ -58,7 +58,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-10 flex flex-col gap-2 border-t border-white/10 pt-6 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-          <p>© 2026 R.A. Kartini - Savilla Tifania Mahadewi</p>
+          <p>© 2026 R.A. Kartini - Siti Nur'aisa Mansur</p>
           <p>Built with Next.js &amp; Tailwind CSS.</p>
         </div>
       </div>

@@ -8,7 +8,7 @@ import Footer from "@/components/Footer";
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="flex min-h-screen flex-col bg-background text-foreground antialiased">
+      <body className="flex min-h-screen flex-col bg-white text-foreground antialiased">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
