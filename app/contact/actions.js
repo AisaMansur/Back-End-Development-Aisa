@@ -1,7 +1,7 @@
 // BE Live 3 Server Actions
 "use server";
 
-import { createSupabaseServerClient } from "@/lib/supabase/supabase";
+import { supabase } from "@/lib/supabase/supabase";
 
 export async function submitContactForm(formData) {
   const name = formData.get("name");
